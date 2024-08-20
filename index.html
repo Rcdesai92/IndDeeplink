@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indulge Global Linking</title>
+</head>
+
+<body>
+    <h1>Indulge Global Linking...</h1>
+    <div class="info">
+        <p><strong>Path:</strong> <span id="path"></span></p>
+        <p><strong>ID:</strong> <span id="id"></span></p>
+    </div>
+    <script>
+        // Function to get query parameters from the URL
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            const path = params.get('path'); // Get the 'path' parameter
+            const id = params.get('id'); // Get the 'id' parameter
+            return { path, id };
+        }
+
+        // Extract the parameters
+        const { path, id } = getQueryParams();
+
+        // Print the parameters on the page
+        document.getElementById('path').textContent = path || 'Not available';
+        document.getElementById('id').textContent = id || 'Not available';
+
+
+        if (path && id) {
+            const userAgent = navigator.userAgent;
+
+            if (userAgent.includes('Android')) {
+                // If the user is on Android, try to open the app, then fallback to Play Store
+                window.location.href = `ind://${path}/${id}`;
+                setTimeout(() => {
+                    window.location.href = "https://play.google.com/store/apps/details?id=com.rutu12.IndulgeApplication";
+                }, 2000); // Wait 2 seconds before fallback
+            } else if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+                // If the user is on iOS, try to open the app, then fallback to App Store
+                window.location.href = `ind://${path}/${id}`;
+                // Try to open the app
+                setTimeout(() => {
+                    window.location.href = "https://apps.apple.com/in/app/indulgeapplication/id6476107583";
+                }, 2000); // Wait 2 seconds before fallback
+            } else {
+                // For other platforms (e.g., desktop), redirect to a fallback page
+                // window.location.href = "https://indulge.global/";
+                // Handle non-mobile or unhandled cases
+            }
+        } else {
+            // If path or id is missing, redirect to an error or fallback page
+            // window.location.href = "https://indulge.global/";
+        }
+    </script>
+</body>
+
+</html>
